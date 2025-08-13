@@ -1,0 +1,125 @@
+// src/styles/components/sections/intro-sections/_result-interpretation.scss
+@use '../../../base/variables' as *;
+@use '../../../base/mixins' as *;
+
+
+
+.interpretation {
+	margin: 30px 0;
+
+	&__container {
+		max-width: 1170px;
+		padding: 0 15px;
+		margin: 0 auto;
+	}
+
+	&__body {
+		margin-bottom: 30px;
+		border-radius: $radius-block;
+		color: $color-text-dark;
+		padding: 30px;
+		box-shadow: $shadow-block;
+		background-color: $color-bg-white;
+
+		@include respond-to($breakpoint-md) {
+			padding: 15px;
+		}
+	}
+
+	&__title {
+		text-align: center;
+		font-size: 24px;
+		font-weight: 700;
+		line-height: 120%;
+		margin: 0 0 15px 0;
+		color: $color-text-dark;
+	}
+
+	&__sections {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 20px;
+		margin: 0 0 20px 0;
+
+		@include respond-to($breakpoint-md) {
+			grid-template-columns: 1fr;
+			gap: 15px;
+		}
+	}
+
+	&__section {
+		border-radius: $radius-block;
+		padding: 15px;
+		border: 1px solid $color-bg-gray;
+		background: $color-bg-light;
+
+		&_results {
+			grid-column: 1 / 3;
+
+			@include respond-to($breakpoint-md) {
+				grid-column: auto;
+			}
+		}
+	}
+
+	&__section-title {
+		font-size: 19px;
+		font-weight: 600;
+		margin-bottom: 10px;
+		line-height: 120%;
+		color: $color-text-dark;
+
+		@include respond-to($breakpoint-md) {
+			font-size: 17px;
+		}
+
+		br {
+			display: none;
+
+			@include respond-to($breakpoint-md) {
+				display: block;
+			}
+		}
+	}
+
+	&__section-subtitle {
+		font-size: 16px;
+		font-weight: 600;
+		margin-bottom: 10px;
+		line-height: 120%;
+		color: $color-accent;
+	}
+
+	&__list-item {
+		font-size: 16px;
+		line-height: 150%;
+		color: $color-text-dark;
+	}
+
+	&__pattern-list {
+		list-style: none;
+		display: flex;
+		flex-direction: column;
+		gap: 5px;
+		margin: 0 0 0 10px;
+	}
+
+	&__pattern-item {
+		position: relative;
+		padding-left: 20px;
+		color: #333;
+		font-size: 16px;
+
+		&::before {
+			content: "";
+			position: absolute;
+			left: 0;
+			top: 50%;
+			transform: translateY(-50%);
+			width: 6px;
+			height: 6px;
+			border-radius: 50%;
+			background-color: $color-text-dark;
+		}
+	}
+}
