@@ -5,20 +5,19 @@ import { downloadPDF } from '../../../utils/pdf/pdfmakeGenerator';
 
 const ResultsHeader = ({ loading, showSuccess, setShowSuccess, resultsData }) => {
 
-    // Сохраняем resultsData в window, чтобы Playwright мог его достать
-    useEffect(() => {
-        if (resultsData) {
-            window._resultsData = resultsData;
-            console.log("✅ resultsData сохранён в window._resultsData");
-        }
-    }, [resultsData]);
+	// Сохраняем resultsData в window, чтобы Playwright мог его достать
+	useEffect(() => {
+		if (resultsData) {
+			window._resultsData = resultsData;
+		}
+	}, [resultsData]);
 
-    const handleDownloadPDF = () => {
-        if (loading) return;
-        console.log("resultsData для PDF:", resultsData);
-        downloadPDF(resultsData);
-        setShowSuccess(true);
-    };
+	const handleDownloadPDF = () => {
+		if (loading) return;
+		console.log("resultsData для PDF:", resultsData);
+		downloadPDF(resultsData);
+		setShowSuccess(true);
+	};
 
 	return (
 		<div className="result-header">

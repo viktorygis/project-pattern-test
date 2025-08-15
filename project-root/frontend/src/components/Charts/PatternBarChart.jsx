@@ -1,42 +1,41 @@
-//src/components/Charts/PatternBarChart.jsx
-import React from "react";
-import { getSubcategoryPatternStats } from "../../utils/resultsHelpers";
 
+//project-root\frontend\src\components\Charts\PatternBarChart.jsx
+import React from "react";
+import {
+	getStrongPatternsByCategory,
+	getTopCategoryByStrongPatterns
+} from "../../utils/resultsHelpers";
+
+/**
+	* PatternBarChart
+	* Визуализирует явно проявленные паттерны по категориям.
+	* Рамка ("border") выделяет именно ту категорию, которую вычислила аналитика (topCategory).
+	*
+	* @param {Array} categories - список категорий паттернов
+	* @param {Array} patternResults - результаты паттернов пользователя
+	* @param {number} strongThreshold - порог для выделения сильных паттернов (по умолчанию 75)
+	* @param {string} topCategoryFromResults - топовая категория из анализа (для полной синхронизации)
+	*/
 const PatternBarChart = ({
 	categories,
 	patternResults,
-	strongThreshold = 75
+	strongThreshold = 75,
+	topCategoryFromResults // желательно передавать пропсом из resultsData.topCategory
 }) => {
-	const categoryWrappers = (categories || []).map((cat) => {
-		const strongPatterns = [];
-		(cat.subcategories || []).forEach((subcat) => {
-			const stats = getSubcategoryPatternStats(patternResults, subcat);
-			(subcat.patterns || []).forEach((pat) => {
-				const nameRaw = pat.pattern?.ru || pat.pattern?.en || '';
-				const name = nameRaw.trim().toLowerCase();
-				const percent = stats[name] || 0;
-				if (percent >= strongThreshold) {
-					strongPatterns.push({
-						name: nameRaw,
-						abbr: pat.pattern.abbreviation || "",
-						percent,
-						cssClass: cat.cssClass || "",
-					});
-				}
-			});
-		});
-		return {
-			category: cat.title?.ru || cat.title?.en,
-			description: cat.description?.ru || cat.description?.en || "",
-			cssClass: cat.cssClass || "",
-			strongPatterns,
-		};
-	});
+	// Получаем массив категорий с явно выраженными паттернами
+	const categoryWrappers = getStrongPatternsByCategory(categories, patternResults, strongThreshold);
 
+	// Только категории, где есть strongPatterns
 	const visibleCategoryWrappers = categoryWrappers.filter(
 		(cat) => cat.strongPatterns.length > 0
 	);
 
+	// Используем topCategory из пропса для синхронизации с InterpretationSection
+	const topCategory = topCategoryFromResults
+		// если не передан проп, вычисляем сами (но лучше передавать пропсом!)
+		|| getTopCategoryByStrongPatterns(categories, patternResults, strongThreshold);
+
+	// Собираем легенду
 	const legendItems = [];
 	visibleCategoryWrappers.forEach((cat) => {
 		cat.strongPatterns.forEach((p) => {
@@ -46,15 +45,22 @@ const PatternBarChart = ({
 		});
 	});
 
+	// Для отладки (можно убрать)
+	// console.log("[PatternBarChart] topCategory:", topCategory);
+	// console.log("[PatternBarChart] visibleCategoryWrappers:", visibleCategoryWrappers);
+
 	return (
 		<div className="histogram__container">
 			<div className="histogram__body">
 				<h3 className="histogram__title">Явно проявленные паттерны</h3>
 				<div className="histogram__content">
-					{visibleCategoryWrappers.map((cat, i) => (
+					{visibleCategoryWrappers.map((cat) => (
 						<div
 							key={cat.category}
-							className={"histogram__category-wrapper" + (i === 0 ? " border" : "")}
+							className={
+								"histogram__category-wrapper" +
+								(topCategory && cat.id === topCategory.id ? " border" : "")
+							}
 						>
 							<div className="histogram__category-row">
 								<div className="histogram__category">{cat.category}</div>
@@ -70,7 +76,10 @@ const PatternBarChart = ({
 												></div>
 											</div>
 											<span
-												className={"histogram__percentage" + (p.percent === 100 ? " maximum" : "")}
+												className={
+													"histogram__percentage" +
+													(p.percent === 100 ? " maximum" : "")
+												}
 											>
 												{p.percent}%
 											</span>

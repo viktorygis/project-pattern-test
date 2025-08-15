@@ -46,6 +46,7 @@ const PatternTestEntry = () => {
 	if (step === "questions") {
 		return (
 			<QuestionsScreen
+				showTestFillButton={false}
 				userData={userData}
 				timeDisplay={timeDisplay}
 				onComplete={({ answers, patterns }) => {
@@ -89,7 +90,7 @@ const PatternTestEntry = () => {
 							Посмотреть результат
 						</a>
 						<br />
-					{/* 	Пройти тест ещё раз */}
+						{/* 	Пройти тест ещё раз */}
 						{/* 	<button className="patterns-button patterns-button-primary" style={{ marginTop: 30 }} onClick={() => setStep("intro")}>Пройти тест ещё раз</button> */}
 					</div>
 				</div>

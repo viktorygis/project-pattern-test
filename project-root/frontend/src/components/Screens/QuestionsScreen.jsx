@@ -1,5 +1,3 @@
-//src/components/Screens/QuestionsScreen.jsx
-
 import React, { useState, useEffect } from 'react';
 
 function shuffleArray(array) {
@@ -27,7 +25,8 @@ const QuestionsScreen = ({
 	questionsUrl = '/pattern-test/data/questions.json',
 	onComplete,
 	userData,
-	timeDisplay = ''
+	timeDisplay = '',
+	showTestFillButton = true // добавлен проп для управления видимостью кнопки
 }) => {
 
 	const fullName = userData?.fullName || "";
@@ -154,12 +153,12 @@ const QuestionsScreen = ({
 	};
 
 	// Тестовая кнопка: заполнить все ответы автоматически и перейти к результатам
-/* 	const handleFillTestAnswers = () => {
+	const handleFillTestAnswers = () => {
 		if (!questions.length) return;
 		const autoAnswers = questions.map(q => q.options[0] ?? '');
 		const autoPatterns = questions.map(q => q.patterns[0] ?? '');
 		if (onComplete) onComplete({ answers: autoAnswers, patterns: autoPatterns });
-	}; */
+	};
 
 	if (loading) {
 		return (
@@ -271,14 +270,16 @@ const QuestionsScreen = ({
 
 					</div>
 					{/* --- Тестовая кнопка --- */}
-					{/* <button
-						className="patterns-button"
-						type="button"
-						style={{ margin: '20px auto', display: 'block' }}
-						onClick={handleFillTestAnswers}
-					>
-						Заполнить тестовые ответы
-					</button> */}
+					{showTestFillButton && (
+						<button
+							className="patterns-button"
+							type="button"
+							style={{ margin: '20px auto', display: 'block' }}
+							onClick={handleFillTestAnswers}
+						>
+							Заполнить тестовые ответы
+						</button>
+					)}
 					{/* --- Конец тестовой кнопки --- */}
 				</div>
 			</div>

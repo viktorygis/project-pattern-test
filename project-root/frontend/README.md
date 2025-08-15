@@ -1,70 +1,135 @@
-# Getting Started with Create React App
+# PATTERN TEST
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+> Веб-приложение для диагностирования индивидуальных паттернов поведения, мышления, коммуникации и управления временем.
+> Пользователь проходит тест на сайте или через Telegram-бота, получает индивидуальный PDF-отчёт, результаты доступны по уникальной ссылке.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## 📑 Оглавление
 
-### `npm start`
+1. [О проекте](#о-проекте)
+2. [Структура документации](#структура-документации)
+3. [Быстрый старт](#быстрый-старт)
+4. [Сценарии пользователя](#сценарии-пользователя)
+5. [Архитектура и компоненты](#архитектура-и-компоненты)
+6. [Данные и форматы](#данные-и-форматы)
+7. [PDF-отчёт](#pdf-отчёт)
+8. [Разработчикам](#разработчикам)
+9. [FAQ и поддержка](#faq-и-поддержка)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+---
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## О проекте
 
-### `npm test`
+PATTERN TEST — это интерактивный тест, который анализирует поведенческие, мыслительные и коммуникативные паттерны пользователя.
+Результаты визуализируются и доступны в PDF, сервис поддерживает сценарии прохождения как через сайт, так и через Telegram-бота.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+---
 
-### `npm run build`
+## Структура документации
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+| Файл                                                             | Назначение                                                               |
+| ---------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| [PATTERN_TEST_DOC.md](DOC/PATTERN_TEST_DOC.md)                   | Пошаговая инструкция пользователя, описание логики теста, форматы данных |
+| [PATTERN_TEST_Architecture.md](DOC/PATTERN_TEST_Architecture.md) | Структура проекта, обзор компонентов, схемы архитектуры                  |
+| [PATTERN_TEST_PDF.md](DOC/PATTERN_TEST_PDF.md)                   | Описание структуры PDF-отчёта, блоки, генерация PDF                      |
+| [README.md](README.md)                                           | Вводная информация, быстрый старт, оглавление, ссылки на разделы         |
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+---
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Быстрый старт
 
-### `npm run eject`
+```bash
+# 1. Установите зависимости
+npm install
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+# 2. Запустите сервер (если нужен API)
+node server.js
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+# 3. Запустите приложение для разработки
+npm start
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+- Приложение откроется на [http://localhost:3000](http://localhost:3000)
+- Тестовый сервер — [http://localhost:5000](http://localhost:5000)
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+---
 
-## Learn More
+## Сценарии пользователя
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- На сайте:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+     1. Вводная страница → форма → вопросы → результат → PDF
+     2. Результаты доступны по уникальной ссылке
 
-### Code Splitting
+- Через Telegram-бота:
+     1. Проходишь тест в чате → бот отправляет ответы на сервер → получаешь ссылку на результат
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+Подробно: [Пользовательский сценарий](DOC/PATTERN_TEST_DOC.md#кратко-по-шагам-пользователя)
 
-### Analyzing the Bundle Size
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## Архитектура и компоненты
 
-### Making a Progressive Web App
+- Компоненты React разбиты по смыслу: экраны, секции, графики, утилиты
+- Данные (questions, patterns) лежат в `public/data/`
+- Стили — через Sass, кастомизация по категориям/паттернам
+- Генерация PDF реализована в `utils/pdfmakeGenerator.js`
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+Подробнее: [Архитектура и структура проекта](DOC/PATTERN_TEST_Architecture.md)
 
-### Advanced Configuration
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+## Данные и форматы
 
-### Deployment
+- `questions.json` — массив вопросов, каждому варианту сопоставлен паттерн
+- `patterns.json` — структура категорий, подкатегорий, паттернов, CSS-классы
+- Ответы — массив выбранных паттернов, сохраняются на сервере
+- Все данные — в формате JSON, UTF-8
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+Подробнее: [Данные и форматы](DOC/PATTERN_TEST_DOC.md#данные-и-форматы)
 
-### `npm run build` fails to minify
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## PDF-отчёт
+
+- PDF доступен для скачивания на странице результата
+- Генерация реализована через [pdfmake](https://github.com/bpampuch/pdfmake)
+- Структура и настройка — [PATTERN_TEST_PDF.md](DOC/PATTERN_TEST_PDF.md)
+
+---
+
+## Разработчикам
+
+### Добавить вопрос или паттерн
+
+1. Измени `public/data/questions.json` или `public/data/patterns.json`
+2. Перезапусти сервер/приложение
+3. Проверь корректность отображения и расчёта результатов
+
+### Запустить тесты
+
+```bash
+npm test
+```
+
+### Кастомизация стилей
+
+- Измени файлы в `src/styles/`
+- Используй CSS-классы из `patterns.json` для индивидуальной стилизации
+
+### FAQ
+
+- **Результаты не отображаются?** — Проверь, что ответы совпадают с названиями паттернов из `patterns.json`
+- **Ошибки при сборке?** — Убедись, что установлены все зависимости, Node.js 18+
+- [Частые вопросы и поддержка](DOC/PATTERN_TEST_DOC.md#дополнительная-информация)
+
+---
+
+## FAQ и поддержка
+
+- Для обратной связи — см. [контакты](DOC/PATTERN_TEST_DOC.md#контактыинформация)
+- [Пошаговый разбор работы приложения](DOC/PATTERN_TEST_DOC.md#пошаговый-разбор-работы-приложения)
+- [Обзор компонентов](DOC/PATTERN_TEST_Architecture.md#обзор-основных-компонентов)
+
+---
