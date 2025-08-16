@@ -46,7 +46,7 @@ const PatternTestEntry = () => {
 	if (step === "questions") {
 		return (
 			<QuestionsScreen
-				showTestFillButton={false}
+				showTestFillButton={true}
 				userData={userData}
 				timeDisplay={timeDisplay}
 				onComplete={({ answers, patterns }) => {

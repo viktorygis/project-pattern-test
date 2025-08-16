@@ -1,4 +1,4 @@
-//resultsHelpers.js
+//project-root\frontend\src\utils\responseTypeHelpers.js
 import { determineResponseType } from "./responseTypeHelpers";
 
 // ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ДЛЯ АНАЛИЗА РЕЗУЛЬТАТОВ ПАТТЕРНОВ
@@ -103,7 +103,11 @@ export function getStrongPatternsByCategory(categories, patternResults, strongTh
 		};
 	});
 }
-
+// Возвращает массив названий выраженных паттернов (проявленность >= strongThreshold)
+export function getStrongPatternNames(categories, patternResults, strongThreshold = 75) {
+	const strongPatternsByCategory = getStrongPatternsByCategory(categories, patternResults, strongThreshold);
+	return strongPatternsByCategory.flatMap((cat) => cat.strongPatterns.map((p) => p.name));
+}
 // Возвращает топовую категорию по сильным паттернам (совместимо с PatternBarChart)
 export function getTopCategoryByStrongPatterns(categories, patternResults, strongThreshold = 75) {
 	const strongCategories = getStrongPatternsByCategory(categories, patternResults, strongThreshold).filter((cat) => cat.strongPatterns.length > 0);
@@ -169,13 +173,11 @@ export function getStrengths({ topPatterns }) {
 
 // Главная сборка всех данных для ResultsScreen
 export function createResultsData({ userData, categories, patternResults }) {
+	const strongPatternNames = getStrongPatternNames(categories, patternResults, 75);
 	const topPatterns = getTopPatterns({ categories, patternResults });
-	const topCategory = getTopCategoryByStrongPatterns(categories, patternResults); // <-- новая логика!
+	const topCategory = getTopCategoryByStrongPatterns(categories, patternResults);
 	const patternMessage = getPatternMessage({ topCategory });
-	const opportunities = getOpportunities({ topCategory });
-	const behaviorModel = getBehaviorModel({ topPatterns });
-	const strengths = getStrengths({ topPatterns });
-	const responseType = determineResponseType(topPatterns);
+	const responseType = determineResponseType(strongPatternNames);
 
 	return {
 		userData,
@@ -184,10 +186,7 @@ export function createResultsData({ userData, categories, patternResults }) {
 		topPatterns,
 		topCategory,
 		patternMessage,
-		opportunities,
-		behaviorModel,
 		responseType,
-		strengths,
 		user: userData,
 		date: new Date().toLocaleDateString("ru-RU"),
 	};

@@ -92,23 +92,21 @@
 
 		input[type="checkbox"] {
 			display: inline-block;
-			width: 20px;
-			height: 20px;
+			width: 24px;
+			height: 24px;
 			appearance: none;
-			//		background: url('/img/test-patterns/check-disabled.svg') no-repeat center;
+			background: url('/img/test-patterns/check-disabled.svg') no-repeat center;
 
-			border: 2px solid #000;
 			background-size: contain;
 			cursor: pointer;
 			//border: none;
 			outline: none;
 			padding: 10px;
-			margin-top: 4px;
+			margin-top: 2px;
 		}
 
 		input[type="checkbox"]:checked {
-			//		background: url("/img/test-patterns/check.svg") no-repeat center;
-			border: 2px solid #00ff1a;
+			background: url("/img/test-patterns/check.svg") no-repeat center;
 			background-size: contain;
 		}
 

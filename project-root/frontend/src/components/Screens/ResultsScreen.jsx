@@ -43,8 +43,8 @@ const ResultsScreen = ({
 					patternMessage={patternMessage}
 					topPatterns={topPatterns}
 					opportunities={opportunities}
-					behaviorModel={behaviorModel}
 					strengths={strengths}
+					responseType={resultsData.responseType}
 				/>
 				<LiteratureSection />
 			</div>
